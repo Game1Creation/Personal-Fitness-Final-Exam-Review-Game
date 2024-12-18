@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Fitness Final Exam Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 0;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .game-container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .answers {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .answers div {
+            border: 2px dashed #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .answers div.dragging {
+            opacity: 0.5;
+        }
+
+        .drop-zone {
+            min-height: 40px;
+            border: 2px dashed #007bff;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            background-color: #e9f7fe;
+        }
+
+        .completed {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+        .submit-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .grade-display {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Personal Fitness Final Exam Game
+    </header>
+
+    <div class="game-container">
+        <div id="name-entry">
+            <h2>Enter Your Full Name:</h2>
+            <input type="text" id="player-name" placeholder="First and Last Name">
+            <button class="submit-button" onclick="startGame()">Start</button>
+        </div>
+
+        <div id="game-content" style="display: none;">
+            <h2>Match the Questions with the Correct Answers!</h2>
+
+            <div id="questions"></div>
+
+            <button class="submit-button" onclick="submitAnswers()">Submit Answers</button>
+
+            <div id="grade-display" class="grade-display"></div>
+        </div>
+    </div>
+
+    <footer>
+        Designed for educational purposes.
+    </footer>
+
+    <script>
+        const part1 = {
+            questions: [
+                "__________ is an exercise that strengthens the glutes/gluteals.",
+                "Using _________________________ are the three ways to apply the overload principle",
+                "The __________ are strengthened by performing bench press and push-ups",
+                "Sprinting and powerlifting are exercises that use _________ muscle fibers",
+                "The ______________ measures your cardiovascular system?",
+                "High levels of __________ frequently lead to heart disease",
+                "The greatest health risk factor which a person can control is __________.",
+                "________________ is NOT a benefit of warming up before beginning to exercise",
+                "The most serious heat-related heat illness is __________.",
+                "___________ measures your body composition.",
+                "A person's basal metabolic rate (BMR) slows down as they grow older. Exercises that would increase the BMR would include ______________________________.",
+                "____________________________ are the three principles of training that should be followed in developing your personal fitness program."
+            ],
+            answers: [
+                "Lunges",
+                "Overload, progression, and specificity",
+                "Pectoralis",
+                "Fast twitch",
+                "Pacer/mile",
+                "Cholesterol",
+                "Inactivity",
+                "Lowering one’s heart rate",
+                "Heat stroke",
+                "Height & weight",
+                "Weight lifting exercises and aerobic exercise",
+                "Frequency, intensity, and time"
+            ]
+        };
+
+        const part2 = {
+            questions: [
+                "________________ in the body’s primary source of energy",
+                "Target heart rate zone is _______________________________________",
+                "The primary difference between muscular strength is __________________ and muscular endurance training is _________________________",
+                "________________ is the ability of muscles to exert a force one time",
+                "_________________ is developed by using less weight and more repetitions is called.",
+                "Jogging benefits ____________________ the most.",
+                "_________________ will increase your flexibility.",
+                "Performing a _____________ routine after exercise prevents muscles from being sore, lightheadedness, and blood from pooling in your muscles.",
+                "Symptoms of heat stroke are ___________________________.",
+                "The ability of the heart, blood, blood vessels, and the respiratory system to supply oxygen and necessary fuel to the muscles during exercise is called________________________.",
+                "Participating in cardiovascular exercise in the target heart rate zone will result in a ____________________."
+            ],
+            answers: [
+                "Carbohydrates",
+                "Where you want your exercise heart rate to receive fitness benefits",
+                "The amount of weight lifted",
+                "Muscular strength",
+                "Muscular endurance",
+                "Cardiovascular fitness",
+                "Stretching exercises",
+                "Cool down",
+                "Hot dry skin, no sweat, and unsteady walking",
+                "Cardiovascular endurance",
+                "Lower resting heart rate"
+            ]
+        };
+
+        const part3 = {
+            questions: [
+                "Flexibility exercises should be performed _____for best results",
+                "_________ is a health-related fitness component.",
+                "________________________ would all best help you increase your flexibility.",
+                "_______________________ would all best help you develop muscular strength.",
+                "_______________________ would all best help you develop cardiovascular endurance.",
+                "The fitness test that measures flexibility is the _________.",
+                "The fitness test that measures upper body strength is the _________.",
+                "__________ is the nutrient responsible for growth and repair of muscles and other tissues",
+                "________ (70-80% of Max HR) is considered the \"aerobic\" zone for not only improving health, but also athletic conditioning by strengthening the cardiovascular and pulmonary systems of the body",
+                "Aerobic fitness is how well the body transports and utilizes _____________for energy.",
+                "Coronary artery disease is caused by the ____________build up in the wall of the arteries possibly blocking the flow of blood and oxygen to the heart.",
+                "You want to make sure that ___________ of your daily calories should come from protein?",
+                "As a person gets in better cardiovascular shape, their resting heart rate will ____________."
+            ],
+            answers: [
+                "Daily",
+                "Flexibility",
+                "Sit & reach, slow jogging, and yoga",
+                "Squats, isotonic exercises, biceps curls",
+                "Cycling, in-line skating, swimming",
+                "Sit-n-reach",
+                "Push-up",
+                "Protein",
+                "Zone 3",
+                "Oxygen",
+                "Plaque",
+                "10-15%",
+                "Decrease"
+            ]
+        };
+
+        const parts = [part1, part2, part3];
